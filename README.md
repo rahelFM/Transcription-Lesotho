@@ -1,1 +1,3 @@
-# Transcription-Lesotho
+## Speech-to-Text Benchmarking on Code-Switched Zulu-English Dataset
+This repository contains a notebook demonstrating the benchmarking of two speech-to-text models: Whisper Small and Wav2Vec2, trained on a code-switched Zulu-English audio dataset. 
+The notebook includes steps followed to do exploratory data analysis, error analysis, model performance evaluation or explorative model analysis with Character Error Rate and Word Error Rate, and incorporates visualization, explainability tools, and human-in-the-loop techniques as we perfomed some of the error analysis by using human intelligence. 
