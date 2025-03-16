@@ -27,14 +27,29 @@ In this project, we benchmark two popular speech-to-text models, Whisper Small a
 ### Prerequisites
 Before running the notebook, ensure the following libraries are installed in your environment:
 
-- Python >= 3.7
-- TensorFlow
-- Transformers (for Wav2Vec2 and Whisper)
-- matplotlib, seaborn (for visualizations)
-- pandas, numpy (for data manipulation)
-- scikit-learn (for computing CER and WER)
-- torch (for Wav2Vec2)
-- librosa (for audio data processing)
+# Libraries Used
+
+| Library/Package               | Description                                                                 |
+|-------------------------------|-----------------------------------------------------------------------------|
+| **os**                         | Provides a way to interact with the operating system (e.g., file management).|
+| **librosa**                    | A Python package for analyzing and processing audio signals. It is used for loading and visualizing audio files.|
+| **librosa.display**            | A module within `librosa` for displaying audio data (e.g., waveform, spectrograms).|
+| **matplotlib.pyplot**          | A plotting library used for visualizing data and creating static, animated, and interactive plots.|
+| **pandas**                     | Data manipulation and analysis tool, primarily used for handling structured data in the form of DataFrames.|
+| **numpy**                      | A fundamental package for scientific computing in Python, used for working with arrays and matrices.|
+| **seaborn**                    | A data visualization library based on Matplotlib, providing a high-level interface for drawing attractive statistical graphics.|
+| **ipywidgets**                 | A library for building interactive widgets in Jupyter notebooks. Useful for user input during analysis.|
+| **IPython.display**            | Provides functionality to display media objects, such as images and audio, in Jupyter notebooks.|
+| **WordCloud**                  | A library for generating word clouds from text data, visualizing word frequencies.|
+| **string**                     | A Python standard library that provides functions for handling text strings (e.g., string manipulation).|
+| **Audio**                      | A module from IPython to display audio in Jupyter notebooks.|
+| **soundfile**                  | A library to read and write sound files, supporting multiple audio file formats.|
+| **csv**                        | A module for reading and writing CSV (Comma-Separated Values) files.|
+| **torch**                       | PyTorch library, a deep learning framework for training and deploying neural networks.|
+| **transformers**               | A library by Hugging Face for state-of-the-art NLP models like Wav2Vec2, BERT, and GPT. It provides tools for model inference and training.|
+| **librosa** (Repeated)         | Used again for its audio-processing capabilities. |
+| **matplotlib.pyplot** (Repeated)| Used again for generating visual plots.|
+| **IPython.display** (Repeated) | Again used for displaying audio and other media in Jupyter notebooks.|
 
   
 ### Install Dependencies:
