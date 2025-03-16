@@ -10,9 +10,6 @@ The notebook includes steps followed to do exploratory data analysis, error anal
 6. [Insights and Suggestions for Improving Performance](#insights-and-suggestions-for-improving-performance)
 7. [License](#license)
 
-## Overview
-
-In this project, we benchmark two popular speech-to-text models, Whisper Small and Wav2Vec2, on a code-switched dataset of isiZulu-English spoken language. We analyze the transcription results and compare model performance using Character Error Rate (CER) and Word Error Rate (WER). In addition, we perform an error analysis on the Whisper Small model, as it demonstrated better performance.
 ### Steps Involved:
 - Exploratory Data Analysis (EDA) on the dataset
 - Error Metrics: Computation of CER and WER
@@ -43,12 +40,14 @@ Before running the notebook, ensure the following libraries are installed in you
 | `soundfile`                        | Reading and writing sound files in different formats (e.g., WAV, FLAC).           |
 | `csv`                              | Handling CSV file reading and writing.                                            |
 | `torch`                            | Deep learning framework for model building, tensor operations, and GPU support.  |
-| `transformers`                     | Pre-trained models for NLP, ASR, and more. Includes Wav2Vec2 for speech recognition.|
+| `transformers`                     | Pre-trained models for NLP, ASR, and more. Includes Wav2Vec2 for speech recognition.
+|  `whisper`                         | Developed by OpenAI, and it is used for ASR to transcribe and translate spoken language into text across multiple languages.|
 
-  
 ### Install Dependencies:
 !pip install tensorflow transformers torch librosa matplotlib seaborn pandas scikit-learn
-
+!pip install git+https://github.com/openai/whisper.git
+!pip install -U openai-whisper
+!pip install jiwer etc. 
 
 ### Dataset
 This project uses a code-switched isiZulu-English speech dataset. You can upload the dataset in the "/content/dataset_v2cleaned.zip" directory. There is two csv transcription files and 97 corresponding audio files. The first "transcriptions.csv" file holds original ground truth transcription which has columns of idx,user_ids,accent,country,transcript,nchars,audio_ids,audio_paths,duration,origin,domain,gender. We tried to similarize with the expected trnscription csv files generated with the benchmark models from the audio files which has "filename" and "transcription". Depending on that the second transcription dataset is developed "transcriptionscleaned.csv". transcriptionscleaned.csv dataset is used as a ground truth data when training the models and evaluate. 
@@ -70,13 +69,12 @@ from sklearn.metrics import accuracy_score
 ### Step 3: Load and Preprocess the Dataset
 
 In this step, load your audio dataset and corresponding transcriptions. The notebook performs basic pre-processing like:
-
+-Load your dataset 
 - Audio loading and normalization
 - Tokenization of ground truth and predicted transcriptions
-# Load your dataset (replace with your path)
-dataset = pd.read_csv('data/dataset.csv')
 
-### Step 3: Do explorative data analysis
+
+### Step 4: Explorative data analysis
 In this section we have tried to understand the datset's characterstics, including common trends, challenges, and potential biases.
 There are 97 audio data samlples in the dataset and the maximum duration of the audio file is 6.34 seconds with average of 2.08 seconds.
 
@@ -105,12 +103,10 @@ In the initial version of the dataset, /content/lelapa_extracted/dataset_v2/data
 Filename:This column contains the unique identifier for each audio file, ensuring that each transcription corresponds to the correct audio input.
 Transcription: This column holds the textual output generated from the speech in the corresponding audio file. It reflects the model's transcription of the audio content.
 By focusing on these two essential columns, the dataset is more straightforward to work with, particularly for training, evaluating, and comparing models such as Whisper-Small and Wav2Vec2. This simplification also enhances the clarity and relevance of the dataset for the transcription task, allowing for better evaluation of model performance based on transcription accuracy alone, without the distraction of unrelated metadata. 
-### Step 4: Transcribe Audio with Whisper Small and Wav2Vec2
+### Step 5: Transcribe Audio with Whisper Small and Wav2Vec2
 - Whisper Small Model:
-  
 whisper_model = WhisperModel.from_pretrained('whisper-small')
 whisper_preds = whisper_model.transcribe(audio_files)
-
 - Wav2Vec2 Model:
 processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-large-960h")
 model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-large-960h")
@@ -129,31 +125,19 @@ wav2vec_wer = wer(ground_truth_transcriptions, wav2vec_preds)
 
 -Word Error Rate (WER)
 WER measures the difference between the ground truth and the predicted transcription at the word level. A lower WER indicates better performance.
-Both models have the same WER, which means they are equally accurate at predicting words. This suggests that the overall word-level accuracy for both Whisper and Wav2Vec2 is similar.
+whisper has got 0.9542 average of WER, whereas, the wav2vec2 model has got 1.0129 average of WER. This suggests that the overall word-level accuracy of Whisper small model is better than the Wav2Vec2. 
 
 -Character Error Rate (CER):
-CER compares the ground truth and ASR output at the character level. It gives a more detailed analysis than WER by measuring character-level accuracy.
-Whisper CER: 72%
-Wav2Vec2 CER: 86%
-Interpretation: Whisper performs better in terms of character-level accuracy, meaning it transcribes individual characters more accurately than Wav2Vec2. A lower CER is preferred since it shows fewer errors at the character level.
-### Step 6: Visualize the Results
-plt.bar(['Whisper Small', 'Wav2Vec2'], [whisper_wer, wav2vec_wer])
-plt.ylabel('WER')
-plt.title('Model Comparison - WER')
-plt.show()
+CER compares the ground truth and ASR output at the character level. It gives a more detailed analysis than WER by measuring character-level accuracy. On CER the whisper has got 0.6983 average and wav2vec2 has got 0.9062. The analysis of this result is that Whisper performs better in terms of character-level accuracy, meaning it transcribes individual characters more accurately than Wav2Vec2. A lower CER is preferred since it shows fewer errors at the character level. Since whisper has performed better than the Wav2Vec2, in both character level and word level, we chose whisper small for further analysis. 
 
--Since the ## Whisper small model is better in performance than the Wav2Vec2 model to trancribe, on the next step we focused on the better model model for error analysis.
-### Step 7: Conduct Error Analysis
+### Step 6: Conduct Error Analysis
 
-Perform error analysis on the Whisper Small model to gain insights into where it makes the most errors. The notebook provides detailed visualizations for different error types such as substitution, insertion, and deletion.
-## Reproducing Results
+Next we performed error analysis on the Whisper Small model to gain insights into where it makes the most errors. The notebook provides detailed visualizations for different error types such as substitution, insertion, and deletion.
+| Model         | CER (%) | WER (%) | Substitutions | Insertions | Deletions |
+|--------------|--------|--------|--------------|------------|-----------|
+| Whisper-Small | 69    | 95    | 10           | 0          | 2         |
+| Wav2Vec2      | 90     | 100     | 6            | 0          | 6         |
 
-To reproduce the results from this notebook:
-
-1. Clone the repository.
-2. Ensure your environment has the necessary dependencies installed.
-3. Upload the dataset and ensure it is correctly formatted.
-4. Run the notebook cells in sequence to load the dataset, process the audio, evaluate the models, and visualize results.
 ## Model Evaluation & Error Analysis
 
 ### Whisper Small vs Wav2Vec2:
@@ -164,11 +148,18 @@ To reproduce the results from this notebook:
   - Moderate deletion and insertion errors.
 
 ### Error Analysis:
-The error analysis revealed that the model struggles with certain phonetic patterns and sentence structures when switching between Zulu and English in the same sentence. Additionally, noise in the recordings and accent variability posed challenges for both models.
-## Insights and Suggestions for Improving Performance
+The error analysis revealed that the model struggles with certain phonetic patterns and sentence structures when switching between Zulu and English in the same sentence. Another issue we have seen on whisper small is it is tend to transcribe some of the audio into another character unlike the ground truth which is transcribed in Latin. 
 
+## Insights and Suggestions for Improving Performance
 1. Data Augmentation: Increase the amount of training data with code-switched samples, including more diverse accent variations.
-2. Fine-tuning on Code-Switched Data: Fine-tune the models specifically on code-switched Zulu-English datasets.
+2. Fine-tuning on Code-Switched Data: Fine-tune the models specifically on code-switched isiZulu-English datasets.
 3. Speech Enhancement Techniques: Use noise reduction methods to clean the audio input for better transcriptions.
-4. Use of Hybrid Models: Combine Whisper and Wav2Vec2 for a hybrid model that benefits from the strengths of both.
+4. Use of Hybrid Models: Using Whisper base, medium or large or even combining Whisper and Wav2Vec2 for a hybrid model that benefits from the strengths of both can help to overcome, the drawbacks of whisper small model.
 5. Hyperparameter Tuning: Experiment with hyperparameters, especially for Wav2Vec2, to improve performance on non-English languages.
+
+To reproduce the results from this notebook:
+
+1. Clone the repository.
+2. Ensure your environment has the necessary dependencies installed.
+3. Upload the dataset and ensure it is correctly formatted.
+4. Run the notebook cells in sequence to load the dataset, process the audio, evaluate the models, and visualize results.
