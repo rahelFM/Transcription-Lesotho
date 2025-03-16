@@ -15,8 +15,7 @@ The notebook includes steps followed to do exploratory data analysis, error anal
 - Error Metrics: Computation of CER and WER
 - Model Evaluation: Training and evaluation of Whisper Small and Wav2Vec2
 - Error Analysis: Focused error analysis on Whisper Small model performance
-- Visualizations: Display of model performance and error distributions
-- Explainability: Use of explainability tools for model insights
+- Explainability: Used substitution, insertion and deletion to have insight
 - Human-in-the-loop: Suggestions for further performance improvements
 
 ## Setup
