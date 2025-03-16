@@ -147,8 +147,12 @@ Next we performed error analysis on the Whisper Small model to gain insights int
   - Moderate deletion and insertion errors.
 
 ### Error Analysis:
-The error analysis revealed that the model struggles with certain phonetic patterns and sentence structures when switching between languages in the same sentence. Another issue we have seen on whisper small is that it tends to transcribe some of the audio into another character unlike the ground truth which is transcribed in Latin. 
+The error analysis revealed that the model struggles with certain phonetic patterns and sentence structures when switching between languages in the same sentence. Another issue we have seen on whisper small is that it tends to transcribe some of the audio into another character unlike the ground truth which is transcribed in Latin. The SHAP summary plot showing how individual words contribute to the model’s prediction of Word Error Rate in the Whisper small evaluation on the dataset is shown. The words listed in y-axis (e.g., "que," "so," "the," "nicht," etc.) are the features (individual words from transcriptions). These are the most influential words affecting WER. X-Axis (SHAP Value - Impact on Model Output), indicate how much a word increases or decreases the WER prediction. A positive SHAP value means that the word increases WER, leading to a higher error rate and a value closer to zero means little to no impact. The spread of dots shows variability in how that word impacts different samples.
 
+- Words like "que," "nicht," "para," "gonna" have high SHAP values, meaning they significantly increase WER.
+- Words like "the," "so," "on," "you" have low SHAP values, meaning their influence on WER is minimal.
+- The model is showing words like "que" and "nicht" have higher impacts on WER, possibly indicating errors with multilingual speech recognition.
+- 
 ## Insights and Suggestions for Improving Performance
 1. Data: Woek on the data preprocessing more and increase the amount of training data with code-switched samples, including more diverse accent variations.
 2. Fine-tuning: Fine-tune the models specifically on code-switched isiZulu-English datasets.
