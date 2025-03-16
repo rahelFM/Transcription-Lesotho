@@ -67,8 +67,38 @@ In this step, load your audio dataset and corresponding transcriptions. The note
 # Load your dataset (replace with your path)
 dataset = pd.read_csv('data/dataset.csv')
 
-# Preprocess the audio and transcriptions
+### Step 3: Do explorative data analysis
+In this section we have tried to understand the datset's characterstics, including common trends, challenges, and potential biases.
+There are 97 audio data samlples in the dataset and the maximum duration of the audio file is 6.34 seconds with average of 2.08 seconds.
 
+We used an automated language identification tool to classify the language of each transcription. The model outputs language codes according to the ISO 639-1 standard (e.g., "en" for English, "zu" for Zulu). 
+Detected Languages: The languages identified in the dataset included:
+-English (en)
+-isiZulu (zu)
+-Xhosa (xh)
+and other languages such as Portuguese, Spanish, etc.
+# challenges faced in language identification
+Misclassification: A few cases were found where isiZulu transcriptions were identified as other languages, like English or Portuguese.
+Code-Switching: Many transcriptions contained a mix of languages, a phenomenon known as code-switching. The language model could have struggled with identifying these mixed-language transcriptions accurately.
+# Results of language identification
+Distribution of Languages: The language distribution revealed that a large portion of the dataset was identified as English, while isiZulu and Sesotho transcriptions were underrepresented.
+Misclassification Example: Some isiZulu transcriptions were misclassified as English due to linguistic similarities between the two languages.
+
+| Language  | Percentage |
+|-----------|------------|
+| English   | 51.5%      |
+| Xhosa     | 9.3%       |
+| isiZulu   | 1.0%       |
+| Other     | 38.2%      |
+
+The speakers accent is similar which is eng-sot all over the datset and their speech is clear with no background noise. There are 19 speakers in teh dataset, and CALEB is the most frequent speaker. The highest word count is 15 and highest character lenght is 150.  
+
+
+
+In the initial version of the dataset, /content/lelapa_extracted/dataset_v2/dataset_v2cleaned/dataset_v2/transcriptions.csv, which the columns included several attributes such as idx, user_ids, accent, country, transcript, nchars, audio_ids, audio_paths, duration, origin, domain, gender   . While these details could be useful in certain contexts, they were not directly relevant to the transcription task we intended to and not correspondent with the attributes in the audio file. To streamline the dataset and make it more focused on the core objective, I simplified the structure to only include two key columns: Filename and Transcription. /content/lelapa_extracted/dataset_v2/dataset_v2cleaned/dataset_v2
+Filename:This column contains the unique identifier for each audio file, ensuring that each transcription corresponds to the correct audio input.
+Transcription: This column holds the textual output generated from the speech in the corresponding audio file. It reflects the model's transcription of the audio content.
+By focusing on these two essential columns, the dataset is more straightforward to work with, particularly for training, evaluating, and comparing models such as Whisper-Small and Wav2Vec2. This simplification also enhances the clarity and relevance of the dataset for the transcription task, allowing for better evaluation of model performance based on transcription accuracy alone, without the distraction of unrelated metadata. 
 ### Step 4: Transcribe Audio with Whisper Small and Wav2Vec2
 - Whisper Small Model:
   
@@ -91,6 +121,15 @@ whisper_wer = wer(ground_truth_transcriptions, whisper_preds)
 wav2vec_cer = cer(ground_truth_transcriptions, wav2vec_preds)
 wav2vec_wer = wer(ground_truth_transcriptions, wav2vec_preds)
 
+-Word Error Rate (WER)
+WER measures the difference between the ground truth and the predicted transcription at the word level. A lower WER indicates better performance.
+Both models have the same WER, which means they are equally accurate at predicting words. This suggests that the overall word-level accuracy for both Whisper and Wav2Vec2 is similar.
+
+-Character Error Rate (CER):
+CER compares the ground truth and ASR output at the character level. It gives a more detailed analysis than WER by measuring character-level accuracy.
+Whisper CER: 72%
+Wav2Vec2 CER: 86%
+Interpretation: Whisper performs better in terms of character-level accuracy, meaning it transcribes individual characters more accurately than Wav2Vec2. A lower CER is preferred since it shows fewer errors at the character level.
 ### Step 6: Visualize the Results
 plt.bar(['Whisper Small', 'Wav2Vec2'], [whisper_wer, wav2vec_wer])
 plt.ylabel('WER')
