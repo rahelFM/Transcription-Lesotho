@@ -46,7 +46,7 @@ This project uses a code-switched isiZulu-English speech dataset. You can upload
 
 ### Step 1: Clone the 
 If you want to clone the repository and get the notebook along with required resources:
-git clone https://github.com/your-username/speech-to-text-benchmarking.git
+git clone https://github.com/rahelFM/Transcription-Lesotho.git
 cd speech-to-text-benchmarking
 
 ### Step 2: Import Necessary Libraries
