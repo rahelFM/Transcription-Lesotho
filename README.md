@@ -162,7 +162,8 @@ The error analysis revealed that the model struggles with certain phonetic patte
 
 To reproduce the results from this notebook:
 
-1. Clone the repository.
-2. Ensure your environment has the necessary dependencies installed.
-3. Upload the dataset and ensure it is correctly formatted.
-4. Run the notebook cells in sequence to load the dataset, process the audio, evaluate the models, and visualize results.
+Download the notebook file you received and open it in Google Colab.
+Install any necessary dependencies by running the installation commands in the first few cells (if applicable). You may need to install packages like TensorFlow, PyTorch, etc.
+Upload the dataset to Colab using the file upload feature, or provide a link if the dataset is hosted online. Make sure it is properly formatted.
+Run the notebook cells in sequence to load the dataset, process the audio, evaluate the models, and visualize results.
+
