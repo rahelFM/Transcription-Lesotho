@@ -91,10 +91,7 @@ Misclassification Example: Some isiZulu transcriptions were misclassified as Eng
 | isiZulu   | 1.0%       |
 | Other     | 38.2%      |
 
-The speakers accent is similar which is eng-sot all over the datset and their speech is clear with no background noise. There are 19 speakers in teh dataset, and CALEB is the most frequent speaker. The highest word count is 15 and highest character lenght is 150.  
-
-
-
+The speakers accent is similar which is eng-sot all over the datset and their speech is clear with no background noise. There are 19 speakers in teh dataset, and CALEB is the most frequent speaker. The highest word count is 31 and highest character lenght is 153.  
 In the initial version of the dataset, /content/lelapa_extracted/dataset_v2/dataset_v2cleaned/dataset_v2/transcriptions.csv, which the columns included several attributes such as idx, user_ids, accent, country, transcript, nchars, audio_ids, audio_paths, duration, origin, domain, gender   . While these details could be useful in certain contexts, they were not directly relevant to the transcription task we intended to and not correspondent with the attributes in the audio file. To streamline the dataset and make it more focused on the core objective, I simplified the structure to only include two key columns: Filename and Transcription. /content/lelapa_extracted/dataset_v2/dataset_v2cleaned/dataset_v2
 Filename:This column contains the unique identifier for each audio file, ensuring that each transcription corresponds to the correct audio input.
 Transcription: This column holds the textual output generated from the speech in the corresponding audio file. It reflects the model's transcription of the audio content.
